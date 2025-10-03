@@ -4,6 +4,7 @@ import "dotenv/config";
 import pool from "./config/db.js";
 import { securityConfig } from "./config/securityConfig.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import router from "./routes/taskRoutes.js";
 
 
 
@@ -11,14 +12,19 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 app.use(cookieParser());
-app.use(express.json()); 
 
 securityConfig(app);
 app.use(cookieParser());
 // Routes
+app.use('/api/task', router)
+
+
 app.get("/", (req, res) => {
   res.send("API WORKING...");
 });
+
+
+
 
 // Error handler
 app.use(errorHandler);
@@ -40,7 +46,7 @@ app.use((err, req, res, next) => {
     console.log("Connected to Database");
 
     app.listen(port, () =>
-      console.log(`🚀 Server running on http://localhost:${port}`)
+      console.log(`Server running on http://localhost:${port}`)
     );
   } catch (error) {
     console.error("DB connection failed:", error.message);
