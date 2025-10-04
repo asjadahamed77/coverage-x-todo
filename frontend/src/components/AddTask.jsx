@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const AddTask = () => {
   const { refreshTasks } = useContext(AppContext);
@@ -13,16 +14,18 @@ const AddTask = () => {
 
     try {
       await axios.post("/task", { title, description });
+      toast.success("Task added successfully!");
       setTitle("");
       setDescription("");
-      refreshTasks(); // refresh the list after adding
+      refreshTasks(); 
     } catch (error) {
+      toast.error("Failed to add task.");
       console.error("Error adding task:", error);
     }
   };
 
   return (
-    <div className="w-full sm:w-[550px]">
+    <div className="w-full  ">
       <h1 className="text-xl font-medium">Add a Task</h1>
       <form
         onSubmit={handleSubmit}
@@ -42,12 +45,14 @@ const AddTask = () => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
+        <div className="flex justify-end">
         <button
           type="submit"
-          className="w-fit bg-mainColor dark:bg-foreground dark:text-background text-white px-8 py-2 rounded-lg hover:opacity-90 duration-200 transition-opacity"
+          className="w-fit bg-mainColor dark:bg-foreground dark:text-background text-white px-12 py-2 rounded-lg hover:opacity-90 duration-200 transition-opacity"
         >
           Add
         </button>
+        </div>
       </form>
     </div>
   );

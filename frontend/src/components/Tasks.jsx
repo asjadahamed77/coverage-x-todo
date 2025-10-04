@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Tasks = () => {
   const { tasks, refreshTasks, loading, error } = useContext(AppContext);
@@ -8,8 +9,10 @@ const Tasks = () => {
   const markDone = async (id) => {
     try {
       await axios.patch(`/task/${id}/done`);
+      toast.success("Task marked as done!");
       refreshTasks();
     } catch (err) {
+      toast.error("Failed to mark task as done.");
       console.error("Error marking done:", err);
     }
   };
@@ -17,8 +20,10 @@ const Tasks = () => {
   const deleteTask = async (id) => {
     try {
       await axios.delete(`/task/${id}`);
+      toast.success("Task deleted successfully!");
       refreshTasks();
     } catch (err) {
+      toast.error("Failed to delete task.");
       console.error("Error deleting task:", err);
     }
   };
